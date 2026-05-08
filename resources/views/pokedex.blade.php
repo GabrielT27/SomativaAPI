@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokédex</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         :root {
             --bg:      #0a0a0f;
             --surface: #111118;
@@ -167,8 +167,7 @@
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes float  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
         @keyframes spin   { to{transform:rotate(360deg)} }
-    </style>
-</head>
+    </head>
 <body>
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
@@ -274,6 +273,11 @@ const tipoMap = {
     'rock':'rock','pedra':'rock','ice':'ice','gelo':'ice','dragon':'dragon','dragão':'dragon',
     'ghost':'ghost','fantasma':'ghost','dark':'dark','sombrio':'dark','steel':'steel','aço':'steel',
     'fairy':'fairy','fada':'fairy','fighting':'fighting','lutador':'fighting'
+};
+const localPokemonImages = {
+    'Volthorn': '/images/pokemons/Volthorn.png',
+    'Pyrosnak': '/images/pokemons/Pyrosnak.png',
+    'Glacifera': '/images/pokemons/Glacifera.png'
 };
 const tipoEmoji = {
     fire:'🔥',fogo:'🔥',water:'💧',água:'💧',grass:'🌿',planta:'🌿',
@@ -438,7 +442,8 @@ async function carregarBanco() {
         grid.innerHTML=d.pokemons.map((p,i)=>{
             const nomeSeguro = escaparTexto(p.nome);
             const tipoSeguro = escaparTexto(p.tipo);
-            const imagemSeguro = escaparTexto(p.imagem);
+            const imagemSeguro = escaparTexto(p.imagem || localPokemonImages[p.nome] || '');
+            const temImagem = Boolean(p.imagem || localPokemonImages[p.nome]);
 
             return `
             <div class="banco-card" id="card-${p.id}" style="animation-delay:${i*0.05}s">
@@ -446,7 +451,7 @@ async function carregarBanco() {
 
                 <div class="bc-art" id="art-${p.id}">
                     ${
-                        p.imagem
+                        temImagem
                         ? `<img src="${imagemSeguro}" alt="${nomeSeguro}">`
                         : `<span style="font-size:3rem">${getTipoEmoji(p.tipo)}</span>`
                     }

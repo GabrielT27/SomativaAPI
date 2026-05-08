@@ -6,8 +6,8 @@
     <title>Pokédex Laravel</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    <style>
         :root {
             --bg: #0a0a0f;
             --surface: #111118;
@@ -307,7 +307,8 @@
                 font-size: 4.8rem;
             }
         }
-    </head>
+    </style>
+</head>
 <body>
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -378,4 +379,4 @@
         </section>
     </main>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\SomativaAPI\resources\views/welcome.blade.php ENDPATH**/ ?>

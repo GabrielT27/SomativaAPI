@@ -46,7 +46,23 @@ Route::post('/pokemon/novo', function (Request $request) {
         'nome'   => 'required|string|min:3',
         'tipo'   => 'required|string',
         'ataque' => 'required|integer',
+        'foto'   => 'nullable|image|mimes:jpeg,png,gif,jpg|max:2048',
     ]);
+
+    // Se houver arquivo, salva na pasta public/images/pokemons
+    if ($request->hasFile('foto')) {
+        $arquivo = $request->file('foto');
+        $nomeArquivo = time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
+        $caminho = 'images/pokemons/' . $nomeArquivo;
+        
+        // Salva o arquivo
+        $arquivo->move(public_path('images/pokemons'), $nomeArquivo);
+        
+        // Armazena o caminho no array de dados
+        $dados['imagem'] = '/' . $caminho;
+    } else {
+        $dados['imagem'] = null;
+    }
 
     $pokemon = Pokemon::create($dados);
 
@@ -99,7 +115,7 @@ Route::get('/pokemon/{nome}', function ($nome) {
     }
 
     // 2. Se não encontrou no banco, busca na PokeAPI
-    $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$nome}");
+    $response = Http::withoutVerifying()->timeout(30)->get("https://pokeapi.co/api/v2/pokemon/{$nome}");
 
     if ($response->successful()) {
         $dados = $response->json();

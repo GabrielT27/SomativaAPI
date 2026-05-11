@@ -8,13 +8,13 @@ class pokemon_controller extends Controller
 {
     public function index()
     {
-        $response = Http::get('https://pokeapi.co/api/v2/pokemon?limit=20');
+        $response = Http::withoutVerifying()->timeout(30)->get('https://pokeapi.co/api/v2/pokemon?limit=20');
 
         if ($response->successful()) {
             $dados = $response->json();
 
             $lista = collect($dados['results'])->map(function ($p) {
-                $detalhe = Http::get($p['url'])->json();
+                $detalhe = Http::withoutVerifying()->timeout(30)->get($p['url'])->json();
                 return [
                     'id'   => $detalhe['id'],
                     'nome' => ucfirst($detalhe['name']),
